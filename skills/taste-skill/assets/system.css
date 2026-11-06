@@ -24,6 +24,15 @@
   --p-inv-accent-ink: #111111;
   --p-inv-action: #ffffff;
   --p-inv-action-ink: #111111;
+  /* semantic colors for states (success, warning, error, info) */
+  --p-success: #10b981;      --p-success-ink: #ffffff;
+  --p-warning: #f59e0b;      --p-warning-ink: #111111;
+  --p-error: #ef4444;        --p-error-ink: #ffffff;
+  --p-info: #3b82f6;         --p-info-ink: #ffffff;
+  --p-inv-success: #10b981;  --p-inv-success-ink: #ffffff;
+  --p-inv-warning: #f59e0b;  --p-inv-warning-ink: #111111;
+  --p-inv-error: #ef4444;    --p-inv-error-ink: #ffffff;
+  --p-inv-info: #3b82f6;     --p-inv-info-ink: #ffffff;
   /* the lit ground behind UI and in the closing band (references/cards.md), one per page, tech pages only
      (none on kind other, which is flat): <html data-ground="sand|sky|sage|painting">. system.js gives it to every ground
      that holds UI, on light and dark pages alike; --hue on one panel changes only its accent */
@@ -69,10 +78,17 @@
   --t-body: 16px;
   --t-lead: 18px;
   --t-card: 18px;
+  --t-large: 20px;
+  --t-xlarge: 22px;
+  --t-h4: 20px;
   --t-h3: 24px;
   /* straight lines from the phone size at 390 to the desktop size at 1440 (system.md's table) */
   --t-h2: clamp(30px, 1.72vw + 23.3px, 48px);
   --t-h1: clamp(38px, 3.24vw + 25.4px, 72px);
+  /* intermediate fluid sizes for more typographic control */
+  --t-h4-fluid: clamp(18px, 0.86vw + 15.64px, 24px);
+  --t-large-fluid: clamp(18px, 0.86vw + 15.64px, 24px);
+  --t-xlarge-fluid: clamp(20px, 1.29vw + 15.29px, 28px);
   /* a big number stays a step under the h2 (VI-11): 38 at 1440, 28 at 390, so it never reads as a
      section heading; a stats row and a price set their own, smaller still */
   --t-stat: clamp(28px, .952vw + 24.29px, 38px);
@@ -84,11 +100,28 @@
   --btn-h: 44px;
   --btn-h-sm: 36px;
   --nav-h: var(--nav);  /* the older name, kept for the kit's files */
-  --icon: 16px;         /* small icons: socials, menu chevrons, mono brand marks */
+  
+  /* icon system - integrated sizing tokens */
+  --icon-xs: 12px;
+  --icon-sm: 14px;
+  --icon-md: 16px;         /* small icons: socials, menu chevrons, mono brand marks */
+  --icon-lg: 20px;
+  --icon-xl: 24px;
+  --icon-2xl: 32px;
+  --icon-3xl: 48px;
+  --icon: var(--icon-md);  /* legacy token for backward compatibility */
 
-  /* motion */
+  /* motion - expanded system */
   --ease: cubic-bezier(.2, .7, .2, 1);
   --dur: 180ms;
+  --dur-fast: 120ms;
+  --dur-slow: 300ms;
+  --dur-page: 400ms;
+  --ease-in: cubic-bezier(.4, 0, .7, .2);
+  --ease-out: cubic-bezier(0, .5, .2, 1);
+  --ease-in-out: cubic-bezier(.4, 0, .2, 1);
+  --ease-bounce: cubic-bezier(.68, -0.55, .27, 1.55);
+  --stagger: 60ms;
 }
 html[data-radius="sharp"] { --r-sm: 4px; --r-md: 6px;  --r-lg: 8px;  --r-btn: 4px; }
 html[data-radius="soft"]  { --r-sm: 8px; --r-md: 12px; --r-lg: 20px; --r-btn: 8px; }
@@ -112,7 +145,7 @@ html[data-radius] .panel { --p-r: var(--r-md); }
 }
 @media (min-width: 1024px) {
   :root { --gut: 80px; --section: 56px; --section-band: 96px; --card-gap: 24px;
-          --t-lead: 20px; --t-card: 20px; --t-h3: 28px; }
+          --t-lead: 20px; --t-card: 20px; --t-large: 22px; --t-xlarge: 24px; --t-h3: 28px; --t-h4: 22px; }
   /* a place (and a local service): the 1200 column at x 120-1320 */
   html[data-type="place"] { --gut: 120px; --container: 1200px; }
 }
@@ -124,6 +157,12 @@ html[data-radius] .panel { --p-r: var(--r-md); }
   --t-h1: clamp(32px, 1.524vw + 26.06px, 48px);
   --t-h2: clamp(24px, .762vw + 21px, 32px);
   --t-h3: clamp(20px, .381vw + 18.51px, 24px);
+  --t-h4: 18px;
+  --t-large: 18px;
+  --t-xlarge: 20px;
+  --t-h4-fluid: clamp(16px, 0.38vw + 14.51px, 20px);
+  --t-large-fluid: clamp(16px, 0.38vw + 14.51px, 20px);
+  --t-xlarge-fluid: clamp(18px, 0.76vw + 15.02px, 22px);
   --r-sm: 2px; --r-md: 0px; --r-lg: 0px; --r-btn: 2px;
 }
 :root[data-type="place"] :is(h1, .t-h1) { line-height: 1.104; }
@@ -138,16 +177,28 @@ html[data-radius] .panel { --p-r: var(--r-md); }
   --bg: var(--p-bg); --surface: var(--p-surface); --ink: var(--p-ink); --muted: var(--p-muted);
   --accent: var(--p-accent); --accent-ink: var(--p-accent-ink); --card: var(--p-surface);
   --action: var(--p-action); --action-ink: var(--p-action-ink);
+  --success: var(--p-success); --success-ink: var(--p-success-ink);
+  --warning: var(--p-warning); --warning-ink: var(--p-warning-ink);
+  --error: var(--p-error); --error-ink: var(--p-error-ink);
+  --info: var(--p-info); --info-ink: var(--p-info-ink);
 }
 .ground-surface {
   --bg: var(--p-surface); --surface: var(--p-bg); --ink: var(--p-ink); --muted: var(--p-muted);
   --accent: var(--p-accent); --accent-ink: var(--p-accent-ink); --card: var(--p-bg);
   --action: var(--p-action); --action-ink: var(--p-action-ink);
+  --success: var(--p-success); --success-ink: var(--p-success-ink);
+  --warning: var(--p-warning); --warning-ink: var(--p-warning-ink);
+  --error: var(--p-error); --error-ink: var(--p-error-ink);
+  --info: var(--p-info); --info-ink: var(--p-info-ink);
 }
 .ground-inverse {
   --bg: var(--p-inv-bg); --surface: var(--p-inv-surface); --ink: var(--p-inv-ink); --muted: var(--p-inv-muted);
   --accent: var(--p-inv-accent); --accent-ink: var(--p-inv-accent-ink); --card: var(--p-inv-surface);
   --action: var(--p-inv-action); --action-ink: var(--p-inv-action-ink);
+  --success: var(--p-inv-success); --success-ink: var(--p-inv-success-ink);
+  --warning: var(--p-inv-warning); --warning-ink: var(--p-inv-warning-ink);
+  --error: var(--p-inv-error); --error-ink: var(--p-inv-error-ink);
+  --info: var(--p-inv-info); --info-ink: var(--p-inv-info-ink);
 }
 :root, .ground-base, .ground-surface, .ground-inverse {
   --line: color-mix(in oklab, var(--ink) 11%, transparent);
@@ -155,6 +206,10 @@ html[data-radius] .panel { --p-r: var(--r-md); }
   /* effects (fx.js) and UI fragments (assets/ui) take the colours of the ground they sit on */
   --fx-bg: var(--bg); --fx-surface: var(--surface); --fx-ink: var(--ink); --fx-muted: var(--muted);
   --fx-accent: var(--accent); --fx-accent-ink: var(--accent-ink);
+  --fx-success: var(--success); --fx-success-ink: var(--success-ink);
+  --fx-warning: var(--warning); --fx-warning-ink: var(--warning-ink);
+  --fx-error: var(--error); --fx-error-ink: var(--error-ink);
+  --fx-info: var(--info); --fx-info-ink: var(--info-ink);
   --ui-font: var(--font-text); --ui-mono: var(--font-mono); --ui-radius: var(--r-md);
 }
 .ground-base, .ground-surface, .ground-inverse { background: var(--bg); color: var(--ink); }
@@ -183,7 +238,13 @@ h1, h2, h3, h4 {
 h1, .t-h1 { font-size: var(--t-h1); line-height: 1.04; }
 h2, .t-h2 { font-size: var(--t-h2); line-height: 1.1; }
 h3, .t-h3 { font-size: var(--t-h3); line-height: 1.2; }
-h4, .t-card { font-family: var(--font-text); font-weight: 500; font-size: var(--t-card); line-height: 1.3; letter-spacing: -0.01em; }
+h4, .t-h4 { font-size: var(--t-h4); line-height: 1.3; letter-spacing: -0.01em; }
+.t-card { font-family: var(--font-text); font-weight: 500; font-size: var(--t-card); line-height: 1.3; letter-spacing: -0.01em; }
+.t-large { font-size: var(--t-large); line-height: 1.4; }
+.t-xlarge { font-size: var(--t-xlarge); line-height: 1.4; }
+.t-h4-fluid { font-size: var(--t-h4-fluid); line-height: 1.3; }
+.t-large-fluid { font-size: var(--t-large-fluid); line-height: 1.4; }
+.t-xlarge-fluid { font-size: var(--t-xlarge-fluid); line-height: 1.4; }
 p { text-wrap: pretty; }
 .t-lead  { font-size: var(--t-lead); line-height: 1.5; }
 .t-body  { font-size: var(--t-body); line-height: 1.55; }
@@ -460,6 +521,282 @@ html:is([data-buttons="pill"], [data-buttons="arrow"]) .btn:hover::after { trans
         font-size: var(--t-label); color: var(--ink); }
 .pill .muted { color: var(--muted); }
 
+/* ---------------------------------------------------------------- component variant system
+   Consistent variant patterns using BEM methodology with data-attribute support
+   
+   Variant patterns:
+   1. Size variants: --sm, --md, --lg, --xl (applies to buttons, cards, inputs, etc.)
+   2. Style variants: --primary, --secondary, --tertiary (semantic styling)
+   3. State variants: --active, --disabled, --loading (interactive states)
+   4. Visual variants: --outline, --ghost, --solid (presentation styles)
+   
+   Usage examples:
+   <button class="btn btn--primary btn--lg">Large Primary</button>
+   <div class="card card--outline card--lg">Large Outline Card</div>
+   <div class="card" data-variant="outline" data-size="lg">Large Outline Card (data attributes)</div>
+*/
+
+/* Size variants */
+.btn--sm { height: var(--btn-h-sm); padding: 0 var(--s-4); font-size: var(--t-small); }
+.btn--lg { height: 52px; padding: 0 var(--s-6); font-size: var(--t-lead); }
+.btn--xl { height: 60px; padding: 0 var(--s-7); font-size: var(--t-large); }
+
+.card--sm { --card-pad: 12px; }
+.card--lg { --card-pad: 24px; }
+.card--xl { --card-pad: 32px; }
+
+/* Style variants using semantic colors */
+.btn--success { --action: var(--success); --action-ink: var(--success-ink); }
+.btn--warning { --action: var(--warning); --action-ink: var(--warning-ink); }
+.btn--error { --action: var(--error); --action-ink: var(--error-ink); }
+.btn--info { --action: var(--info); --action-ink: var(--info-ink); }
+
+.card--success { border-color: var(--success); }
+.card--warning { border-color: var(--warning); }
+.card--error { border-color: var(--error); }
+.card--info { border-color: var(--info); }
+
+/* State variants */
+.btn--disabled,
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.btn--loading { position: relative; color: transparent !important; }
+.btn--loading::after {
+  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 20px; height: 20px; border: 2px solid currentColor; border-top-color: transparent;
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+
+.card--disabled { opacity: 0.6; }
+.card--loading { position: relative; min-height: 120px; }
+.card--loading::after {
+  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 32px; height: 32px; border: 3px solid var(--line); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin 1s linear infinite;
+}
+
+/* Visual variants */
+.btn--outline {
+  background: transparent; border-color: var(--action); color: var(--action);
+}
+.btn--outline:hover {
+  background: color-mix(in oklab, var(--action) 10%, transparent);
+}
+
+.btn--ghost {
+  background: transparent; border-color: transparent; color: var(--ink);
+}
+.btn--ghost:hover {
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
+}
+
+.card--outline {
+  background: transparent; border-color: var(--line-strong);
+}
+.card--ghost {
+  background: transparent; border: 1px solid transparent;
+}
+.card--solid {
+  background: var(--surface); border-color: var(--surface);
+}
+
+/* Section heading variants */
+.section-head--sm { --head-gap: 32px; }
+.section-head--lg { --head-gap: 64px; }
+.section-head--xl { --head-gap: 80px; }
+
+/* Animation for loading states */
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Data attribute support for variant system */
+[data-size="sm"] { font-size: var(--t-small); }
+[data-size="lg"] { font-size: var(--t-lead); }
+[data-size="xl"] { font-size: var(--t-large); }
+
+[data-variant="outline"] { border-color: var(--line-strong); background: transparent; }
+[data-variant="ghost"] { border-color: transparent; background: transparent; }
+[data-variant="solid"] { background: var(--surface); }
+
+[data-state="disabled"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+[data-state="loading"] { position: relative; color: transparent !important; }
+
+/* Responsive variants */
+@media (max-width: 639px) {
+  .btn--sm-mobile { height: var(--btn-h-sm); padding: 0 var(--s-4); font-size: var(--t-small); }
+  .btn--full-mobile { width: 100%; }
+  .card--stack-mobile { display: flex; flex-direction: column; }
+  .card--full-mobile { width: 100%; margin-inline: 0; }
+  
+  [data-mobile="stack"] { display: flex; flex-direction: column; }
+  [data-mobile="full"] { width: 100%; margin-inline: 0; }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .btn--full-tablet { width: 100%; }
+  .card--stack-tablet { display: flex; flex-direction: column; }
+  
+  [data-tablet="stack"] { display: flex; flex-direction: column; }
+  [data-tablet="full"] { width: 100%; margin-inline: 0; }
+}
+
+@media (min-width: 1024px) {
+  .btn--auto-desktop { width: auto; }
+  .card--grid-desktop { display: grid; }
+  
+  [data-desktop="grid"] { display: grid; }
+  [data-desktop="auto"] { width: auto; }
+}
+
+/* ---------------------------------------------------------------- form component system */
+/* Form container */
+.form { display: grid; gap: var(--s-6); max-width: 600px; }
+.form--compact { gap: var(--s-4); }
+.form--wide { max-width: 800px; }
+
+/* Form groups */
+.form-group { display: grid; gap: var(--s-3); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
+@media (max-width: 639px) { .form-row { grid-template-columns: 1fr; } }
+
+/* Labels */
+.form-label { 
+  display: block; font-size: var(--t-label); font-weight: 500; 
+  color: var(--ink); line-height: 1.4; 
+}
+.form-label--required::after { content: "*"; color: var(--error); margin-left: 2px; }
+
+/* Input fields */
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%; height: 48px; padding: 0 var(--s-4);
+  font: 400 var(--t-body)/1.5 var(--font-text); color: var(--ink);
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: var(--r-md);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none; border-color: var(--action); 
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--action) 20%, transparent);
+}
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--muted); opacity: 0.7; }
+
+/* Textarea */
+.form-textarea { height: auto; min-height: 120px; padding: var(--s-3) var(--s-4); resize: vertical; }
+
+/* Select */
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right var(--s-4) center; background-size: 12px; padding-right: 40px; }
+
+/* Checkboxes and radios */
+.form-check { display: flex; align-items: flex-start; gap: var(--s-3); cursor: pointer; }
+.form-check-input {
+  flex: none; width: 20px; height: 20px; margin-top: 2px;
+  border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: var(--bg);
+  transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+.form-check-input:checked { background: var(--action); border-color: var(--action); }
+.form-check-input[type="checkbox"]:checked { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6l2 2 4-4' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: 10px; }
+.form-check-input[type="radio"] { border-radius: 50%; }
+.form-check-input[type="radio"]:checked::after { content: ""; display: block; width: 8px; height: 8px; margin: 5px; background: white; border-radius: 50%; }
+.form-check-label { font-size: var(--t-body); color: var(--ink); line-height: 1.5; }
+
+/* Validation states */
+.form-input--error { border-color: var(--error); }
+.form-input--success { border-color: var(--success); }
+.form-input--warning { border-color: var(--warning); }
+
+.form-error { font-size: var(--t-small); color: var(--error); margin-top: var(--s-2); }
+.form-success { font-size: var(--t-small); color: var(--success); margin-top: var(--s-2); }
+.form-hint { font-size: var(--t-small); color: var(--muted); margin-top: var(--s-2); }
+
+/* Form actions */
+.form-actions { display: flex; gap: var(--s-4); align-items: center; flex-wrap: wrap; }
+.form-actions--center { justify-content: center; }
+.form-actions--right { justify-content: flex-end; }
+.form-actions--stack { flex-direction: column; align-items: stretch; }
+
+/* ---------------------------------------------------------------- icon system */
+/* Icon container */
+.icon { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.icon--xs { width: var(--icon-xs); height: var(--icon-xs); }
+.icon--sm { width: var(--icon-sm); height: var(--icon-sm); }
+.icon--md { width: var(--icon-md); height: var(--icon-md); }
+.icon--lg { width: var(--icon-lg); height: var(--icon-lg); }
+.icon--xl { width: var(--icon-xl); height: var(--icon-xl); }
+.icon--2xl { width: var(--icon-2xl); height: var(--icon-2xl); }
+.icon--3xl { width: var(--icon-3xl); height: var(--icon-3xl); }
+
+/* Icon colors */
+.icon--primary { color: var(--action); }
+.icon--success { color: var(--success); }
+.icon--warning { color: var(--warning); }
+.icon--error { color: var(--error); }
+.icon--info { color: var(--info); }
+.icon--muted { color: var(--muted); }
+.icon--inverse { color: var(--p-inv-ink); }
+
+/* Icon with background */
+.icon-bg { background: var(--surface); border-radius: var(--r-md); padding: var(--s-2); }
+.icon-bg--primary { background: var(--action); color: var(--action-ink); }
+.icon-bg--success { background: var(--success); color: var(--success-ink); }
+.icon-bg--warning { background: var(--warning); color: var(--warning-ink); }
+.icon-bg--error { background: var(--error); color: var(--error-ink); }
+
+/* Icon in buttons */
+.btn .icon { flex: none; }
+.btn--sm .icon { width: var(--icon-sm); height: var(--icon-sm); }
+.btn--lg .icon { width: var(--icon-lg); height: var(--icon-lg); }
+.btn--xl .icon { width: var(--icon-xl); height: var(--icon-xl); }
+
+/* ---------------------------------------------------------------- error, empty, and loading states */
+/* Error state */
+.state-error { border-color: var(--error); background: color-mix(in oklab, var(--error) 8%, transparent); }
+.state-error__icon { color: var(--error); }
+.state-error__title { color: var(--error); font-weight: 500; }
+.state-error__message { color: var(--ink); font-size: var(--t-body); }
+
+/* Empty state */
+.state-empty { text-align: center; padding: var(--s-8) var(--s-4); color: var(--muted); }
+.state-empty__icon { color: var(--muted); margin-bottom: var(--s-4); }
+.state-empty__title { font-size: var(--t-h3); margin-bottom: var(--s-3); color: var(--ink); }
+.state-empty__message { font-size: var(--t-body); max-width: 400px; margin: 0 auto; }
+
+/* Loading state */
+.state-loading { position: relative; min-height: 200px; display: grid; place-items: center; }
+.state-loading__spinner { 
+  width: 40px; height: 40px; border: 3px solid var(--line); 
+  border-top-color: var(--action); border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.state-loading__text { margin-top: var(--s-4); color: var(--muted); }
+
+/* Skeleton loading */
+.skeleton { background: var(--line); border-radius: var(--r-md); animation: pulse 1.5s ease-in-out infinite; }
+.skeleton--text { height: 1em; width: 100%; }
+.skeleton--circle { border-radius: 50%; aspect-ratio: 1; }
+.skeleton--card { height: 200px; }
+.skeleton--avatar { width: 40px; height: 40px; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .state-loading__spinner { animation: none; border-top-color: transparent; }
+  .skeleton { animation: none; }
+  .btn:active { transform: none; }
+  .btn:hover::after { transform: none; }
+  .link:hover::after { transform: none; }
+}
+
 /* ---------------------------------------------------------------- card (one style) */
 .card {
   display: flex; flex-direction: column; gap: var(--s-2); min-width: 0;
@@ -476,9 +813,17 @@ html:is([data-buttons="pill"], [data-buttons="arrow"]) .btn:hover::after { trans
 .card.card--open { --c-pad: 0px; background: none; border: 0; box-shadow: none; padding: 0; overflow: visible; }
 .card.card--open > .panel { margin: var(--s-5) 0 0; border-radius: var(--r-lg); }
 .card.card--open > .panel--top { margin: 0 0 var(--s-5); }
+
+/* Card style variants aligned with component variant system */
+.card--plan { gap: var(--s-4); }
 .card--plan.is-featured { border-color: var(--action); box-shadow: inset 0 0 0 1px var(--action); }
+
+/* Additional card variants for consistency */
+.card--split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+.card--stacked { display: flex; flex-direction: column; }
+.card--horizontal { display: flex; flex-direction: row; align-items: center; gap: var(--s-5); }
+
 /* cards.css (linked after this file) sets .card { gap: 0 } for feature cards; a plan keeps its 16px rows */
-.card.card--plan { gap: var(--s-4); }
 
 /* ---------------------------------------------------------------- visuals: panels and frames
    A card's .panel (the inset visual), .stage and the placements (.at-corner, .at-rise, .at-over,
